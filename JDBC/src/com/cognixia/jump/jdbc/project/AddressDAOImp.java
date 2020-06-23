@@ -1,9 +1,11 @@
 package com.cognixia.jump.jdbc.project;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import com.cognixia.jump.jdbc.connection.ConnectionManagerProperties;
 
@@ -66,7 +68,7 @@ public class AddressDAOImp implements AddressDAO{
 	@Override
 	public Address addAddress(Address address) {
 		
-		try(PreparedStatement pstmt = conn.prepareStatement("insert into address values(?,?,?,?,?)");) {
+		try(PreparedStatement pstmt = conn.prepareStatement("insert into address values(?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);) {
 			
 			pstmt.setInt(1, address.getId());
 			pstmt.setString(2, address.getStreet());
@@ -75,7 +77,19 @@ public class AddressDAOImp implements AddressDAO{
 			pstmt.setString(5, address.getZip());
 			
 			int insert = pstmt.executeUpdate();
+			ResultSet rs = pstmt.getGeneratedKeys();
+
+			BigDecimal genId = null;
+			while (rs.next()) {
+				 // Get automatically generated key value (found on IBM support)
+				  genId = rs.getBigDecimal(1);                                      
+			}
 			if(insert > 0) {
+				// TODO: will need ID of inserted row, and set the address before returning
+				// then can use to make/update a Student object
+				
+				// DONE: use Statement.RETURN_GENERATED_KEYS and getGeneratedKeys()
+				address.setId(genId.intValue());
 				return address;
 			}
 			
