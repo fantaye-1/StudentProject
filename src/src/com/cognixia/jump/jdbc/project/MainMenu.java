@@ -59,7 +59,7 @@ public class MainMenu {
 
 	public static void displayGetAllStudents(Scanner input) {
   
-    List<Student> students = getAllStudents();
+    		List<Student> students = getAllStudents();
 		
 		System.out.println("All Students:\n");
 		
@@ -72,14 +72,28 @@ public class MainMenu {
 	}
 
 	public static void displayFindAStudent(Scanner input) {
-  
-    String student = sc.nextLine();
+  		
+		// by ID
+		System.out("Enter ID to find student:");
+		
+    		String student = input.nextLine(); // should this be just input or something else?
 		
 		System.out.println("Information on " + student + ":\n");
 		List<Students> allStudents = getAllStudents();
-		List<Students> byName = allStudents.stream()
-											.filter(t -> t.getId() == student)
-											.forEach(System.out::prinln);
+		List<Students> byID = allStudents.stream()
+						.filter(t -> t.getId() == student)
+						.forEach(System.out::prinln);
+		
+		// by name
+// 		System.out("Enter name to find student:");
+		
+//     		String student = input.nextLine(); // should this be just input or something else?
+		
+// 		System.out.println("Information on " + student + ":\n");
+// 		List<Students> allStudents = getAllStudents();
+// 		List<Students> byName = allStudents.stream()
+// 						.filter(t -> t.getFirstName() == student)
+// 						.forEach(System.out::prinln);
                       
 	}
 
