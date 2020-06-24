@@ -71,36 +71,13 @@ public class MainMenu {
 	}
 
 	public static void displayAddAStudent(Scanner input) {
+		
 		// To add a student, first need to create a new Address object
-		// could be split into methods further (displayNewAddress,
-		// displayChooseDepartment, etc.)
-		System.out.println("Enter student address:");
-
-		System.out.println("Enter street name:\n");
-		String street = input.nextLine().trim();
-		System.out.println("Enter city name:\n");
-		String city = input.nextLine().trim();
-		System.out.println("Enter state (2-letter abbreviation):\n");
-		String state = input.nextLine().trim();
-		System.out.println("Enter zip code:\n");
-		String zip = input.nextLine().trim();
-
-		Address newAddress = new Address(0, street, city, state, zip);
-		AddressDAOImp addressDao = new AddressDAOImp();
-		// need to reassign this variable since addAddress returns inserted ID from DB
-		newAddress = addressDao.addAddress(newAddress);
-
+		// could be split into methods further (displayNewAddress, displayChooseDepartment, etc.)
+		Address newAddress = displayAddAnAddress(input);
+		
 		// Also need to assign the new student to a department
-		System.out.println("Choose a department id to assign to new student:\n");
-		DepartmentDAOImp deptDao = new DepartmentDAOImp();
-		// could make a method to pretty-print this
-		for (Department dept : deptDao.getAllDepartments()) {
-			System.out.println(dept);
-		}
-		System.out.println("(Enter department id:)\n");
-		String deptIdStr = input.nextLine().trim();
-		int deptId = Integer.parseInt(deptIdStr);
-		Department studentDept = deptDao.getDepartmentById(deptId);
+		Department studentDept = displayChooseDepartment(input);
 
 		// now can take rest of input for new student
 		System.out.println("Enter student first name:");
@@ -129,6 +106,41 @@ public class MainMenu {
 	}
 
 	public static void displayDeleteAStudent(Scanner input) {
+	}
+	
+	// helper methods for displayAddAStudent
+	public static Address displayAddAnAddress(Scanner input) {
+
+		System.out.println("Enter student address:");
+		System.out.println("Enter street name:\n");
+		String street = input.nextLine().trim();
+		System.out.println("Enter city name:\n");
+		String city = input.nextLine().trim();
+		System.out.println("Enter state (2-letter abbreviation):\n");
+		String state = input.nextLine().trim();
+		System.out.println("Enter zip code:\n");
+		String zip = input.nextLine().trim();
+
+		Address newAddress = new Address(0, street, city, state, zip);
+		AddressDAOImp addressDao = new AddressDAOImp();
+		// need to reassign this variable since addAddress returns inserted ID from DB
+		newAddress = addressDao.addAddress(newAddress);
+		return newAddress;
+	}
+
+	public static Department displayChooseDepartment(Scanner input) {
+
+		System.out.println("Choose a department id to assign to new student:\n");
+		DepartmentDAOImp deptDao = new DepartmentDAOImp();
+		// could pretty-print this
+		for (Department dept : deptDao.getAllDepartments()) {
+			System.out.println(dept);
+		}
+		System.out.println("(Enter department id:)\n");
+		String deptIdStr = input.nextLine().trim();
+		int deptId = Integer.parseInt(deptIdStr);
+		Department studentDept = deptDao.getDepartmentById(deptId);
+		return studentDept;
 	}
 
 }
