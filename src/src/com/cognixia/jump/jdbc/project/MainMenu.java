@@ -69,33 +69,24 @@ public class MainMenu {
 		
 		System.out.println("\n");
     		
-		// can also do this with streams and such if wanted
-
 	}
 
 	public static void displayFindAStudent(Scanner input) {
   		
 		// by ID
 		System.out("Enter ID to find student:");
-		
-    		String student = input.nextLine(); // should this be just input or something else?
+    		String student = input.nextLine();
 		
 		System.out.println("Information on " + student + ":\n");
-		List<Students> allStudents = getAllStudents();
-		List<Students> byID = allStudents.stream()
-						.filter(t -> t.getId() == student)
-						.forEach(System.out::prinln);
+		System.out.println(getStudentByID(student));
 		
 		// by name
 // 		System.out("Enter name to find student:");
-		
 //     		String student = input.nextLine(); // should this be just input or something else?
 		
 // 		System.out.println("Information on " + student + ":\n");
-// 		List<Students> allStudents = getAllStudents();
-// 		List<Students> byName = allStudents.stream()
-// 						.filter(t -> t.getFirstName() == student)
-// 						.forEach(System.out::prinln);
+// 		System.out.println(getStudentByName(student); // would need to implement a getStudentByName method;
+
                       
 	}
 
