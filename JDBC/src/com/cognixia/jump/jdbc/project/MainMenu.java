@@ -122,7 +122,7 @@ public class MainMenu {
 		// TODO: still need addStudent()
 		// newStudent = studentDAO.addStudent(newStudent);
 		// syso("Student was added: " + newStudent)
-		System.out.println("Enter student address");
+		
 	}
 
 	public static void displayUpdateAStudent(Scanner input) {
