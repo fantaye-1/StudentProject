@@ -1,3 +1,4 @@
+import java.util.Scanner;
 
 public class MainMenu {
 
@@ -5,12 +6,20 @@ public class MainMenu {
 		
 		// Where to put Scanner open and close is tricky (I may need to use a while loop instead of recalling method)
 		// I'll start by opening and closing inside main and passing it to runScenario
-		runScenario();
+		Scanner input = new Scanner(System.in);
+		runScenario(input);
+		
 		System.out.println("Would you like to go back to main menu? Y or N");
-		if(Y) {
+		String answer = input.next();
+		
+		if(answer == 'Y') {
+			input.close();
 			main(args);
+		}else {
+			input.close();
+			System.exit(0);
 		}
-
+		
 	}
 	
 	public static void runScenario(Scanner input) {
@@ -21,6 +30,28 @@ public class MainMenu {
 
 		// use a switch case to account for their inputs of 1-5
 		// run methods below based on options 1-5
+		
+		System.out.println("What would you like to do? Select option below:");
+		System.out.println("1) Get all students \t2) Find a student \t3) Add a new student\t 4) Update a student\t5) Remove a student");
+		String choice = input.next();
+		
+		switch(choice) {
+			case "1":
+				System.out.println("1 chosen");
+				break;
+			case "2":
+				System.out.println("2 chosen");
+				break;
+			case "3":
+				System.out.println("3 chosen");
+				break;
+			case "4":
+				System.out.println("4 chosen");
+				break;
+			case "5":
+				System.out.println("5 chosen");
+				break;
+		}
 	}
 	
 	public static void displayGetAllStudents(Scanner input){}
