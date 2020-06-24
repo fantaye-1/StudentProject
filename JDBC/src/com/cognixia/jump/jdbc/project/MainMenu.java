@@ -1,4 +1,11 @@
+import java.sql.Date;
 import java.util.Scanner;
+
+import com.cognixia.jump.jdbc.dao.Department;
+import com.cognixia.jump.jdbc.dao.DepartmentDAOImp;
+import com.cognixia.jump.jdbc.project.Address;
+import com.cognixia.jump.jdbc.project.AddressDAOImp;
+import com.cognixia.jump.jdbc.project.Student;
 
 public class MainMenu {
 
@@ -36,7 +43,7 @@ public class MainMenu {
 		System.out.println("What would you like to do? Select option below:");
 		System.out.println(
 				"1) Get all students \t2) Find a student \t3) Add a new student\t 4) Update a student\t5) Remove a student");
-		String choice = input.next();
+		String choice = input.nextLine();
 
 		switch (choice) {
 		case "1":
@@ -64,7 +71,57 @@ public class MainMenu {
 	}
 
 	public static void displayAddAStudent(Scanner input) {
+		// To add a student, first need to create a new Address object
+		// could be split into methods further (displayNewAddress,
+		// displayChooseDepartment, etc.)
+		System.out.println("Enter student address:");
 
+		System.out.println("Enter street name:\n");
+		String street = input.nextLine().trim();
+		System.out.println("Enter city name:\n");
+		String city = input.nextLine().trim();
+		System.out.println("Enter state (2-letter abbreviation):\n");
+		String state = input.nextLine().trim();
+		System.out.println("Enter zip code:\n");
+		String zip = input.nextLine().trim();
+
+		Address newAddress = new Address(0, street, city, state, zip);
+		AddressDAOImp addressDao = new AddressDAOImp();
+		// need to reassign this variable since addAddress returns inserted ID from DB
+		newAddress = addressDao.addAddress(newAddress);
+
+		// Also need to assign the new student to a department
+		System.out.println("Choose a department id to assign to new student:\n");
+		DepartmentDAOImp deptDao = new DepartmentDAOImp();
+		// could make a method to pretty-print this
+		for (Department dept : deptDao.getAllDepartments()) {
+			System.out.println(dept);
+		}
+		System.out.println("(Enter department id:)\n");
+		String deptIdStr = input.nextLine().trim();
+		int deptId = Integer.parseInt(deptIdStr);
+		Department studentDept = deptDao.getDepartmentById(deptId);
+
+		// now can take rest of input for new student
+		System.out.println("Enter student first name:");
+		String firstName = input.nextLine().trim();
+		System.out.println("Enter student last name:");
+		String lastName = input.nextLine().trim();
+		System.out.println("Enter student gender (M or F):");
+		String gender = input.nextLine();
+		System.out.println("Enter student date of birth (YYYY-MM-DD):");
+		String dobStr = input.nextLine().trim();
+		Date dob = Date.valueOf(dobStr);
+		System.out.println("Enter number of student credits:");
+		String credStr = input.nextLine().trim();
+		int credits = Integer.parseInt(credStr);
+
+		Student newStudent = new Student(0, firstName, lastName, gender, dob, credits, newAddress, studentDept);
+		System.out.println("Student ready to add to DB: " + newStudent);
+
+		// TODO: still need addStudent()
+		// newStudent = studentDAO.addStudent(newStudent);
+		// syso("Student was added: " + newStudent)
 		System.out.println("Enter student address");
 	}
 
