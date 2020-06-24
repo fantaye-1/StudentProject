@@ -68,7 +68,9 @@ public class MainMenu {
 		}
 		
 		System.out.println("\n");
-    
+    		
+		// can also do this with streams and such if wanted
+
 	}
 
 	public static void displayFindAStudent(Scanner input) {
