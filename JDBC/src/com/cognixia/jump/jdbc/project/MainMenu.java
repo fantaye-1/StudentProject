@@ -6,6 +6,7 @@ import com.cognixia.jump.jdbc.dao.DepartmentDAOImp;
 import com.cognixia.jump.jdbc.project.Address;
 import com.cognixia.jump.jdbc.project.AddressDAOImp;
 import com.cognixia.jump.jdbc.project.Student;
+import com.cognixia.jump.jdbc.project.StudentDAOImp;
 
 public class MainMenu {
 
@@ -103,6 +104,90 @@ public class MainMenu {
 	}
 
 	public static void displayUpdateAStudent(Scanner input) {
+		
+
+		System.out.println("------updating students--------");
+		// ask the id
+		System.out.println("Enter the Student Id");
+		int std_id = input.nextInt();
+		// added: new line b/c of issues w/ nextInt() -TK
+		input.nextLine();
+		// TODO chek the id is between 1000
+		// checkStudentId(std_id,input);
+		// get the updated student info
+		StudentDAOImp student = new StudentDAOImp();
+		Student old_std = student.getStudentById(std_id);// use it to desplay
+		// TODO ask all the data they want to change
+		System.out.println("Enter new student First name:");
+		String firstName = input.nextLine();
+		//can just add in setters and update old_student -TK
+		//old_std.setFirstName(firstName);
+
+		System.out.println("Enter new student Last name:");
+		String lastName = input.nextLine();
+		//old_std.setLastName(lastName);
+
+		System.out.println("Enter new student Gender:");
+		String gender = input.nextLine();
+		//old_std.setGender(gender);
+
+		// System.out.println("Enter new student Date of birth:");
+		// Date dob =input. ;
+
+		System.out.println("Enter new student credits:");
+		int credits = input.nextInt();
+		// nextInt() causes issues before nextLine(); adding another line -TK
+		input.nextLine();
+
+		System.out.println("-----Enter new student Address:-----");
+
+		// instead, should get whole Address obj and use setter methods to update, then use updateAddress()
+		// get id for the address
+//		int add_id = old_std.getAddress().getId();
+		Address studentAddress = old_std.getAddress();
+
+		// added in setters here -TK
+		System.out.println("Enter student Street:");
+		String street = input.nextLine();
+		studentAddress.setStreet(street);
+		System.out.println("Enter student City:");
+		String city = input.nextLine();
+		studentAddress.setCity(city);
+		System.out.println("Enter student State:");
+		String state = input.nextLine();
+		studentAddress.setState(state);
+		System.out.println("Enter student Zip:");
+		String zip = input.nextLine();
+		studentAddress.setZip(zip);
+		// this won't work; use updateAddress from addressDAO - TK (making a new Address but not inserting it, 
+		// so wrong id)
+//		Address address = new Address(add_id, street, city, state, zip);
+		// instead:
+		AddressDAOImp addressDAO = new AddressDAOImp();
+		boolean updatedAddress = addressDAO.updateAddress(studentAddress);
+		if(!updatedAddress) {
+			System.out.println("Error updating student address; please try again");
+			return;
+		}
+		
+		
+		// System.out.println("Enter new student Department:");
+		// Department dept = input.nextInt();
+
+		// no need to make two student objects; can just use setters on old_student -TK
+		Student new_std = new Student(std_id, firstName, lastName, gender, old_std.getDob(), credits, studentAddress,
+				old_std.getDept());
+
+		// TODO ask which one they want to update
+
+		boolean isUpdated = student.updateStudent(new_std);
+
+		if (isUpdated) {
+			System.out.println("Sucess fully updated");
+			// TODO display the old and new updates.
+		} else {
+			System.out.println("The info is not updated");
+		}		
 	}
 
 	public static void displayDeleteAStudent(Scanner input) {
