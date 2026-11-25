@@ -1,6 +1,6 @@
 package com.cognixia.jump.jdbc.project;
 
-public class Main {
+public class AddressRunner {
 
 	public static void main(String[] args) {
 		

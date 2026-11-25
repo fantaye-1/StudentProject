@@ -6,13 +6,14 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.cognixia.jump.jdbc.connection.DatabaseConfig;
+
 public class DatabaseMetadataExample {
 
 	public static void main(String[] args) {
 
-			Connection conn;
-			try {
-				conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/sakila", "root", "root");
+			DatabaseConfig config = DatabaseConfig.fromEnvironment();
+			try (Connection conn = DriverManager.getConnection(config.getUrl(), config.getUsername(), config.getPassword())) {
 				DatabaseMetaData dbmd = conn.getMetaData();
 				
 				ResultSet rs = dbmd.getTables("university", "public", "%", new String[] {"TABLE"});
@@ -33,8 +34,6 @@ public class DatabaseMetadataExample {
 				System.out.println("Driver name: " + dbmd.getDriverName());
 				System.out.println("Driver version: " + dbmd.getDriverVersion());
 				System.out.println("User name: " + dbmd.getUserName());
-				
-				conn.close();
 				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block

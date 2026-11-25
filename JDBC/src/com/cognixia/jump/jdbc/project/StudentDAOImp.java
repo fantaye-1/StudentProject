@@ -15,7 +15,16 @@ import com.cognixia.jump.jdbc.dao.DepartmentDAOImp;
 
 public class StudentDAOImp implements StudentDAO {
 
-	private Connection conn = ConnectionManagerProperties.getConnection();
+	private final Connection conn;
+
+	public StudentDAOImp() {
+		this(ConnectionManagerProperties.getConnection());
+	}
+
+	// lets tests (or callers) supply their own connection
+	public StudentDAOImp(Connection conn) {
+		this.conn = conn;
+	}
 	
 	// Abrham
 	@Override
@@ -100,36 +109,25 @@ public class StudentDAOImp implements StudentDAO {
 
 	@Override
 	public boolean addStudent(Student student) {
-		try {
-			
-			PreparedStatement sstmt = conn.prepareStatement("insert "
-				+ "into student values(?,?,?,?,?,?,?,?)");
+		// try-with-resources: the statement used to leak whenever the insert succeeded
+		try (PreparedStatement sstmt = conn.prepareStatement("insert "
+				+ "into student values(?,?,?,?,?,?,?,?)")) {
 			
 			sstmt.setInt(1, student.getId());
 			sstmt.setString(2, student.getFirstName());
 			sstmt.setString(3, student.getLastName());
-			// error: this should be gender -TK
-			//sstmt.setString(4, student.getLastName());
 			sstmt.setString(4, student.getGender());
 			sstmt.setDate(5, student.getDob());
 			sstmt.setInt(6, student.getCredits());
 			sstmt.setInt(7, student.getAddress().getId());
-			// error: this was 7, needs to be 8 -TK
 			sstmt.setInt(8, student.getDept().getId());
 			
-			int insert = sstmt.executeUpdate();
-			
-			if(insert > 0) {
-				return true;
-			}
-			
-			sstmt.close();
+			return sstmt.executeUpdate() > 0;
 			
 		} catch (SQLException e) {
 			
 			e.printStackTrace();
 		}
-		
 		
 		return false;
 	}

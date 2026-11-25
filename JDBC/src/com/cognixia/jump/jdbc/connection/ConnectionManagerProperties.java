@@ -1,12 +1,8 @@
 package com.cognixia.jump.jdbc.connection;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
 
 public class ConnectionManagerProperties {
 
@@ -14,23 +10,12 @@ private static Connection connection = null;
 	
 	private static void makeConnection() {
 		
-		Properties props = new Properties();
-		
-		try {
-			props.load(new FileInputStream("resources/config.properties"));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		String url = props.getProperty("url");
-		String userName = props.getProperty("username");
-		String password = props.getProperty("password");
-		
+		// env vars DB_URL / DB_USERNAME / DB_PASSWORD override resources/config.properties
+		DatabaseConfig config = DatabaseConfig.fromEnvironment();
+
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			connection = DriverManager.getConnection(url, userName, password);
+			connection = DriverManager.getConnection(config.getUrl(), config.getUsername(), config.getPassword());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

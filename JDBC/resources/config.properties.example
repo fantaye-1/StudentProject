@@ -1,0 +1,5 @@
+# Copy to config.properties (git-ignored) and fill in your local MySQL settings.
+# Environment variables DB_URL, DB_USERNAME and DB_PASSWORD override these values.
+url=jdbc:mysql://localhost:3306/university
+username=root
+password=
