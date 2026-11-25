@@ -11,7 +11,16 @@ import com.cognixia.jump.jdbc.connection.ConnectionManagerProperties;
 
 public class AddressDAOImp implements AddressDAO{
 
-	private Connection conn = ConnectionManagerProperties.getConnection();
+	private final Connection conn;
+
+	public AddressDAOImp() {
+		this(ConnectionManagerProperties.getConnection());
+	}
+
+	// lets tests (or callers) supply their own connection
+	public AddressDAOImp(Connection conn) {
+		this.conn = conn;
+	}
 	
 	@Override
 	public Address getAddressById(int id) {
@@ -77,19 +86,20 @@ public class AddressDAOImp implements AddressDAO{
 			pstmt.setString(5, address.getZip());
 			
 			int insert = pstmt.executeUpdate();
-			ResultSet rs = pstmt.getGeneratedKeys();
 
 			BigDecimal genId = null;
-			while (rs.next()) {
-				 // Get automatically generated key value (found on IBM support)
-				  genId = rs.getBigDecimal(1);                                      
+			try (ResultSet rs = pstmt.getGeneratedKeys()) {
+				while (rs.next()) {
+					// Get automatically generated key value (found on IBM support)
+					genId = rs.getBigDecimal(1);
+				}
 			}
 			if(insert > 0) {
-				// TODO: will need ID of inserted row, and set the address before returning
-				// then can use to make/update a Student object
-				
-				// DONE: use Statement.RETURN_GENERATED_KEYS and getGeneratedKeys()
-				address.setId(genId.intValue());
+				// use the generated id if the database created one; when the caller
+				// supplied the id explicitly there may be no generated key (was a NullPointerException)
+				if (genId != null) {
+					address.setId(genId.intValue());
+				}
 				return address;
 			}
 			

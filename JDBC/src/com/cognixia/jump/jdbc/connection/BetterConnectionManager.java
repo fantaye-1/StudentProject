@@ -6,9 +6,8 @@ import java.sql.SQLException;
 
 public class BetterConnectionManager {
 
-	private static final String URL = "jdbc:mysql://localhost:3306/university"; // how to connect using Windows
-	private static final String USERNAME = "root";
-	private static final String PASSWORD = "root"; // Windows: root
+	// credentials come from DB_URL / DB_USERNAME / DB_PASSWORD or resources/config.properties
+	private static final DatabaseConfig CONFIG = DatabaseConfig.fromEnvironment();
 
 	private static Connection connection = null;
 	
@@ -18,7 +17,7 @@ public class BetterConnectionManager {
 			// loads in driver in case it isn't loaded automatically
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			// make connection
-			connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+			connection = DriverManager.getConnection(CONFIG.getUrl(), CONFIG.getUsername(), CONFIG.getPassword());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

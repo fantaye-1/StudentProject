@@ -35,9 +35,9 @@ public class Temp {
 		//Student student = new Student(id, fName, lName, gender, dob, credits, address, dept);
 		
 //		Split up work:
-//			1)	Set up address DAO – one or two people (split up methods)
+//			1)	Set up address DAO â€“ one or two people (split up methods)
 //			2)	Split up StudentDAO (Do we need more methods) methods between 2 or 3 people
-//			3)	Work on menu – one or two people
+//			3)	Work on menu â€“ one or two people
 
 		
 
